@@ -1,0 +1,410 @@
+C Programing
+
+Memory Layout
+
+Bộ nhớ chương trình 
+
+Text segment 
+Lưu trữ mã chương trình thực thi, thường chỉ đọc và nằm ở địa chỉ thấp của bộ nhớ chương trình, độ lớn phụ thuộc vào số lượng các câu lệnh và độ phức tạp của chương trình
+Dat: chia làm 4 phần
+Khu vực chứa biến global và static đã được khởi tạo
+Khu vực chứa biến global và static chưa khỏi tạo giá trị
+Heap: bộ nhớ chứa cấp phát động và mở rộng lên địa chỉ cao của bộ nhớ chương trình
+Stack: chứa các biến cục bộ, địa chỉ hàm và địa chỉ trả về của hàm, và mở rộng về hướng heap, khi stack với heap gặp nhau sẽ dẫn tới hết bộ nhớ
+Các lỗi hay gặp với bộ nhớ khi chạy một chương trình C
+Stack overflow:
+Chương trình sử dụng stack quá lớn và liên tục dẫn đến vượt quá bộ nhớ stack có thể cấp phát gây tràn stack
+Nguyên nhân hay gặp là do khai báo mảng có kích thước quá lớn, lồng nhiều hàm hay gọi đệ quy vô hạn dẫn tới tràn stack
+Segment fault; thường xảy ra khi xử dụng con trỏ khi lập trình,  khi chương trình truy cập vào vùng nhớ chưa được cấp phát
+Các nguyên nhân như: 
+Sử dụng con trỏ khi chưa được khỏi tạo hoặc bị gán NULL hoặc đã bị giải phóng trước đó , khắc phục trước khi sử dụng con trỏ luôn luôn so sánh ptr != NULL
+
+Khai báo và định nghĩa:
+Khai báo: 
+Khai báo biến: chỉ đưa ra khai báo tên và kiểu dữ liệu cho biến mà không cấp phát bộ nhớ cho biến, sử dụng extern để khai báo một biến mà không cấp phát bộ nhớ cho biến đó vì biến đó đã được khai báo ở nơi khác.
+Khai báo hàm; Khai báo một hàm tồn tại, tham số truyền vào và kiểu dữ liệu trả về với trình biên dịch mà chưa thực sự có nội dung định nghĩa cho hàm đó
+ Định nghĩa
+Định nghĩa đối với biến: tên và kiểu dữ liệu cho một biến và cấp phát bộ nhớ cho biến đó, kể cả là biến local, global hay static khi được cấp phát vùng nhớ đều được gọi là định nghĩa
+Định nghĩa đối với hàm: có cấu trúc, nội dung hàm 
+
+Thường được sử dụng nhiều trong foward declaration, khi khai báo để chương trình biết các kiểu dữ liệu, các hàm có tồn tại trước khi thực sự định nghĩa nó. Ví dụ như trong các file header .h thường dùng để khai báo các hàm sẽ sử dụng và các hàm đó sẽ được định nghĩa trong file thực thi .c
+
+
+static, inline và extern 
+
+static:
+Nếu một biến được định nghĩa là static thì sẽ được cấp phát bộ nhớ một lần và tồn tại trong suốt chương trình. Không quan tâm là global hay local sẽ được lưu vào vùng nhớ cố định như biến global
+Nếu một biến global được định nghĩa static, nó sẽ giới hạn phạm vi sử dụng trong mã chương trình đó và không cho phép sử dụng ở các mã chương trình khác được liên kết
+Nếu một biến local được định nghĩa static, nó vẫn sẽ giới hạn phạm vi đó là local chỉ chử dụng trong hàm và thủ tục khai báo nó, nhưng nó sẽ không được xóa đi khi thực hiện xong hàm hay định nghĩa lại khi gọi hàm.
+Inline hàm: hàm nội tuyến 
+Sử dụng để tăng tốc độ khi thực hiện chương trình đổi lại ;là kích thước mã chương trình sẽ lớn hơn.
+Thay vì một hàm sẽ được gọi nhảy tới địa chỉ của hàm đó, cấp phát vùng nhớ vào stack thực thi hàm, trả lại vùng nhớ và nhảy lại địa chỉ đã gọi hàm thì một hàm nội tuyến được khai báo với inline sẽ gợi ý cho trình biên dịnh thay vì gọi hàm thì thay thế toàn bộ mã chương trình của hàm đó vào vị trí được gọi, sẽ giảm đi các bước nhảy địa chỉ
+Các compiler hiện nay sẽ quyết định việc có thay thế hay gọi hàm như bình thường cho tối ưu chương trình nên inline cũng không phải phương thức hay dùng lắm
+
+Extern:
+ dùng để khai báo một biến đã tồn tại, thông thường để dùng chung một biến mà biến đó đã được định nghĩa trong một file thực thi khác
+
+Tiền xử lí và macro: 
+Trong chương trình C các câu lệnh bắt đầu bằng # đề được xử lí trong quá trình Tiền xử lí của compiler. 
+Đối với các câu lệnh #inlude nội dung của các file header.h vào file hiện tại với <.h> sẽ tìm kiếm các file header của compiler còn với “ .h” sẽ tìm kiếm các file header trong thư mục chứa file chương trình đang thực thi 
+Về macro sử dụng #define có thể coi là một dạng viết tắt hoặc thay thế mã chương trình giúp tăng tốc độ lập trình và sẽ được trình biên dịch thay thế các mã lệnh có chứa macro đó bằng nội dung được định nghĩa có thể là tham số, hàm … trong quá trình tiền xử lí. Macro giúp lập trình nhanh hơn nhưng mang đến các nguy cơ tiềm ẩn do macro chỉ thay thế mã chương trình mà không quan tâm đến kiểu dữ liệu cũng như vấn đề trong việc ưu tiên toán tử.
+
+Đói với việc sử dụng macro là không khuyến khích và cách để an toàn hơn sử dụng macro là sử dụng các hàm nội tuyến (inline function) với hàm và dùng khai báo kiểu const với các hằng số
+typedef : cho phép người dùng tạo một tên mới cho các kiểu dữ liệu, thường được dùng trong việc khai báo các kiểu dữ liệu mới với struct
+
+Pointer và array
+
+Con trỏ pointer lưu trữ giá trị là địa chỉ 
+Ta có *ptr là con trỏ     
+ptr là địa chỉ con trỏ đó trỏ tới có kích thước cố định 4byte, 8byte,... tùy thuộc vào hệ thống sẽ có kích thước địa chỉ nhớ khác nhau
+*ptr là giá trị tại địa chỉ của con trỏ đó trỏ tới với kích thước khác nhau cho mỗi kiểu dữ liệu khác nhau mà con trỏ đó trỏ tới
+
+Về bản chất là một địa chỉ trỏ tới byte đầu tiên của phần tử được trỏ tới với các kiểu dữ liệu khác nhau sẽ có các bước nhảy khác nhau 
+Giả sử với kiểu char chiếm 1 byte
+Một con trỏ char *p 0x103 với p = p + 1 0x104 địa chỉ mỗi lần sẽ tăng 1 byte vì phần tử đầu tiên con trỏ trỏ tới có kích thước 1 byte, phần tử thứ 2 ở byte tiếp theo nên địa chỉ mỗi lần chỉ tăng một byte
+
+Giả sử với kiểu int chiếm 4 byte 
+Một con trỏ int *p 0x103 với con trỏ trỏ tới một phần tử kiểu int là địa chỉ của byte đầu tiên của phần tử 4 byte đó vì thế khi trỏ đến phần tử int tiếp theo p = p + 1 (0x113) địa chỉ sẽ tăng 4 byte vì phần tử đầu tiên đã chiếm mất 4 byte nên địa chỉ của phần từ tiếp theo sẽ tăng 4 byte so với địa chỉ đầu tiên
+
+Kdl *ptr 
+sizeof(ptr) =  4 hệ 32 bit cố định 8 hệ 64 bit
+sizeof(*ptr) = sizeof(kdl)
+Ptr + n = ptr + n*sizeof(kdl)
+
+Array là một mảng dữ liệu với địa chỉ mảng là địa chỉ của phần tử đầu tiên của một mảng
+Mảng với địa chỉ có thể thao tác với các phần tử mảng như con trỏ, nhưng địa chỉ của mảng cố định và không thể thay đổi có thể coi nó là một const pointer 
+ KDL A[n] = 
+sizeof(A) = KDL * n                                        (A khi dùng là địa chỉ của phần tử đầu mảng A, nhưng sizeof(A) là kích thước của cả mảng A)
+sizeof(&A) = 4 hệ 32 bit cố định 8 hệ 64 bit   (&A là địa chỉ cố định của mảng A)
+
+Ta có 
+KDL A[n]
+KDL *Ptr;
+Ptr = a;                        //0x103                      // ptr trỏ đến phần tử đầu của A hay trỏ đến mảng A
+Ptr = ptr + n                // 0x103 + n*sizeof(KDL)      ptr trỏ đến phần tử thứ n + 1 của A
+ A = lỗi vì A là địa chỉ của mảng và cố định
+Việc khai báo một mảng tĩnh A trong hàm main có thể là hành động khiến khởi tạo mảng trong suốt chương trình chiếm bộ nhớ stack không được giải phóng và bộ nhớ stack thường được cấp nhỏ không thể khai báo những mảng quá lớn. Thay vào đó ta có thể sử dụng cấp phát động, định nghĩa một con trỏ *ptr, con trỏ này sẽ mang địa chỉ như là địa chỉ của mảng và cấp phát cho nó một vùng nhớ n * sizeof(KDL) với n phần từ như mảng. Bằng cách đó địa chỉ con trỏ 4bytes sẽ được lưu trên stack còn vùng nhớ mảng sẽ được lưu trong heap
+
+KDL *ptr = (KDL *)calloc(n, sizeof(KDL));
+Việc thao tác với ptr tương tự như thao tác với mảng dùng ptr[i]            ptr[i] = *(ptr + i)
+
+
+Function pointer 
+Tương tự như biến hàm cũng có một địa chỉ được định và để sử dụng hàm ta cũng có thể sử dụng một con trỏ hàm 
+Để trỏ đến một hàm con trỏ hàm phải được định nghĩa về kiểu dữ liệu trả về và danh sách tham số tương ứng giống như hàm mà nó trỏ tới
+
+Int cong (int a, int b)
+{
+	return a + b;
+}
+
+Int (*ptr_func) (int, int) = cong;
+
+
+Function pointer đóng vai trò quan trọng 
+Hàm callback trong việc xử lí ngắt
+Khi có hành động ngắt trong driver sẽ gọi đến địa chỉ một hàm function callback mà người dùng chỉ cần thực thi trên hàm function callback đó khi có ngắt mà không cần quan tâm đến driver khi ngắt
+Đa hình OOP trên C
+
+
+
+OOP không được hỗ trợ thực sự trên C nhưng vẫn có thể triển khai nó cơ bản bằng một số kĩ thuật nhất định thông qua việc triển khai struct, function pointer, gồm có các tính chất
+Đóng gói 
+Kế thừa 
+Đa hình 
+
+
+
+
+
+Tính đóng gói: 
+Có thể đạt được tính đóng gói bằng cách sử dụng chia thành các file header.h và thực thi .c
+Tính kế thừa:
+Chúng ta có thể kế thừa struct này từ struct khác bằng cách lồng struct vào nhau, struct kế thừa sẽ thừa hưởng các kiểu dữ liệu và các hàm từ struct cha
+
+struct A
+{
+ int A;
+ int B;
+};
+
+Init_A(A * ,..............);
+
+struct B    // struct kế thừa
+{
+ A base;
+ Int c;
+}
+
+InitB(B * ,…………. )
+{
+      Init_A(&(B -> base),........................);  // kế thừa hàm init hai giá trị đầu của struct cha
+      …………………………….
+}
+
+Tính đa hình:
+Dùng function con để các đối tượng khác nhau thực hiện ành động khác nhau trên một giao diện
+
+Struct union và bitfield
+
+Struct dùng để xây dựng một cấu trúc đối tượng, khi sử dụng thì lưu ý liên qua tới kích thước của struct với alignment và pad. Nó gồm nhiều các biến thành viên liên tiếp độc lập thay đổi biến này không làm thay đổi biến khác
+
+Union tất cả các thành viên trong union cùng chung một địa chỉ. Kích thước của một union bằng kích thước của biến thành viên lớn nhất, khi thay đổi một biến sẽ làm thay đổi cả dữ liệu của cả biến khác
+
+
+Bit field : Trường bit được dùng trong cấu trúc struct để quy định số bit cụ thể cho từng thành viên trong struct giúp tối ưu bộ nhớ, thường dùng trong các thao tác bit trong embedded thay cho việc phải sử dụng toán tử bitwise
+Ứng dụng kết hợp union với struct sử dụng bitfield
+Chúng ta có thể giới hạn kích thước tối đa của union bằng một biến thành viên lớn nhất cũng là bit điều khiển toàn bộ trường bit của union, việc sử dụng struct và chia thành viên thành các trường bit nhỏ hơn sẽ giúp thao tác trên từng thành viên y như struct bình thường  
+
+
+- Input/Output: printf, scanf. các file descriptors cơ bản trong Linux
+    - File handling (Linux): ngoài các lệnh đọc, viết file, tìm hiểu thêm fseek.
+
+
+Các bước compile của một chương trình C:
+
+Tiền xử lí (preprocessor): xử lí các chỉ thị bắt đầu bằng # thay chèn macro, thư viện như #include, #define chuyển từ file .c -> file .i
+
+Trình biên dịch(Compiler): Dịch mã nguồn C sang ngôn ngữ máy asembly file .i -> .s
+Asembly: chuyển mã máy thành mã nhị phân 01
+
+Linking: Liên kết các file .o và v file thư viện thành file thực thi cuối cùng .exe (window) hay .out (linux)
+Sử dụng
+gcc -save-temps main.c -o main
+
+Để in ra các file trung gian trong quá trình compile
+
+Cross compiling là biên dịch hộ trên CPU hay máy tính mạnh hơn tạo ra file thực thi cho máy yếu hơn
+
+Ví dụ trong lập trình STM32
+Khi xây dựng chương trình c trên máy tính, máy tính tuy dùng cấu trúc x64 nhưng sử dụng tool để compile chương trình C tạo ra mã nhị phân thực thi cho Arm 32 bit , sau đó mới nạp file thực thi đó xuống vi điều khiển
+
+Static lib/ dynamic lib
+
+Trong quá trình build nếu là static lib sẽ dán trực tiếp các file thư viện đã được chuyển thàng file .o lên kết vào file thực thi. Khi chạy chương trình máy chỉ cần file thực thi .exe và không cần thêm file nào khác
+
+Dynamic lib 
+Trong quá trình build dynamic lib sẽ chỉ cho mã chương trình biết đoạn này nằm trong thư viện nào. Khi chạy chương trình thì nó mới bắt đầu tìm và nạp thư viện .dll vào chương trình, nếu thiếu các file đó file thực thi sẽ không thể hoạt động 
+
+Static lib sẽ khiến chương trình chạy nhanh hơn do không phải load thư viện trong quá trình run time, nhưng sẽ khiến file thực thi nặng khó bảo trì và khó cập nhật hơn do mỗi lần đều phải bulid lakji chương trình từ đầu, phù hợp với chương trình trên MCU nơi không có các hệ điều hành hỗ trợ dynamic và toàn bộ chương trình không có dung lượng quá lớn nằm gọn trong flash thực thi từ đầu đến cuối, cũng như mang lại độ tin cậy cao
+Với dynamic lib phù hợp cho các chương tình trên máy tính nơi có hệ điều hành như window, linux hỗ trợ dynamic, và thường thường các chương trình trên máy tính có dung lượng lớn không thể cài lại toàn bộ mỗi lần.
+Linux Nhúng (Embedded Linux) như trên Raspberry Pi thường thường vừa dùng static vừa dùng dynamic để tối ưu trong quá trình build cũng như là runtime
+
+Static và extern ảnh hưởng tới linking
+
+Khi có static khi viết một file .c sau khi biên dịch thành file .o cái biến static đó sẽ được giấu đi không cho file khác thấy và sử dụng
+Còn đối với extern file .o đó trong quá trình linking sẽ yêu cầu file .o khác thật sự chứa định nghĩa cho biến extern nếu không sẽ báo lỗi
+
+Makefile dùng để quản lí thực thi nhiều file đồng thời 
+Cấu trúc cơ bản của một makefile
+Target: object
+<Tab>command
+
+Target: File muốn tạo ra (ví dụ: main.o hoặc app.exe).
+dependencies: Những file cần thiết để tạo ra target (ví dụ: main.c).
+command: Lệnh shell để thực hiện (bắt buộc phải có một dấu Tab ở đầu dòng).
+
+Các flag và option thường được lưu dưới dạng các biến để có thể dễ dàng thay đổi
+
+CC = gcc trình biên dịch
+CFLAGS = -wall -g   các flag cho quá trình compile
+
+https://github.com/22521000-lab/CBasic
+
+
+
+
+
+https://www.canva.com/design/DAHEr1_Cv5k/LEe6EORT5FVKL2CvQ_GCpA/view?utm_content=DAHEr1_Cv5k&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h01b56ad820
+
+- Phân biệt con trỏ hằng và hằng con trỏ
+- Phân biệt tham trị và tham chiếu truyền vào hàm
+- Phân biệt Big-endian và Little-endian
+- Phân biệt Array và Link-listed
+- Phân biệt các loại con trỏ
+- Argument Commandl line
+- Phân biệt lỗi syntax và lỗi logic
+- Phân biệt p++, p++, ++*p, ++p
+- File Handling (FILE pointer, stream, fopen, fprintf...)
+- Phân biệt biên dịch và thông dịch
+- Tìm hiểu thêm về hàm free()
+- Tìm hiểu thêm về các lỗi thường gặp trong C ngoài Stack overflow và Segmentation fault
+- Cần trình bày rõ chi tiết từng bước trong quá trình biên dịch 1 chương trình C.
+- Trình bày kĩ hơn về Static Linking và Dynamic Linking. (Lập trình C ở môi trường linux)
+- Đọc lại typedef
+- Đọc lại khái niệm mảng array
+- Xử lý dữ liệu bằng Bitwise và bitmask. Có 32 bóng đèn từ 1-32, ghi 1 dòng code để kiểm tra đèn 1,3,5,6 có đang cùng sáng không.
+- Mảng con trỏ và con trỏ mảng
+- Trình bày các bước khi một hàm được gọi.
+- Trình bày về ép kiểu dữ liệu
+- Đọc bảng mã ASCII
+- Trình bày thứ tự toán tử.
+
+
+Sự khác biệt Initialized Data và Uninitialized Data
+Với Uninitialized Data không được khởi tạo ban đầu toàn 0, chia nằm ở vùng này để khỏi lưu trên file thực thi, nhẹ hơn cho file thực thi khi chạy hệ điều hành tự gán 0
+
+Biến local không gán giá trị sẽ lưu ra giá trị rác
+
+malloc với calloc đều cấp phát động nhưng khác biệt, malloc cấp phát động nhưng chứa giá trị rác, còn calloc cấp phát và đảm bảo giá trị = 0
+
+Sử dụng cấp phát động vùng heap không có heap pointer, con trỏ chính tự tạo ra và tự quản lí 
+
+Có Heap allocator = bộ quản lý cấp phát bộ nhớ động (malloc/free) là mã nguồn của thư viện chuẩn (libc)
+
+Free thực chất báo cho Heap allocator là vùng đó đã trống có thể sử dụng lại được chứ chưa trả hẳn về RAM
+
+
+Static library:
+Compile time
+Load vào text code
+
+Dynamic library:
+Run-time
+→ không nằm trong heap hay stack
+→ nằm trong vùng memory được mmap bởi OS
+→ thuộc virtual address space của process
+
+
+Không gian địa chỉ ảo
+
+Kiến trúc 32-bit: địa chỉ 32 bit
+Mỗi process có tối đa 4GB virtual memory
+User space: ~3GB
+Kernel: ~1GB
+Text     bắt đầu    ~0x08048000
+Heap                  từ .BSS -> cao
+Stack    bắt đầu   gần 0xC0000000 -> thấp khoảng 8192 KB = 8 MB
+Thông thường chứ không cố định→ layout linh hoạt (ASLR)
+
+
+64bit có thể lên đến 2^48 = 256 TB
+User space ~ 128 TB
+Kernel space ~ 128 TB
+
+Text: ~0x555555554000
+Stack nnằm gần đỉnh user space:    ~0x7ffffffff000   mặc định 8MB
+
+Stack pointer (SP) đi từ địa chỉ cao → địa chỉ thấp
+
+Khi stack cấp phát là lùi con trỏ stack xuống địa chỉ thấp hơn , cho mảng a thì cấp byte của một mảng địa chỉ sao khi dịch stack pointer, còn mảng bố trí phần từ tăng theo địa chỉ
+
+
+ TP ánh xạ địa chỉ ảo sang ram vật lí thật là phần cứng MMU (Memory Management Unit nằm trong CPU
+
+OS tạo:
+
+Page Table(con trỏ ở PCB)   chứa   Virtual page → Physical frame -> MMU 
+
+Chương trình chưa thực thi (SSD) -> thực thi (RAM)
+
+-> cơ chế demand paging (nạp theo nhu cầu)
+tạo page table -> tạo trang 
+Không lấy hết file vào ram → chỉ "map" file vào memory
+
+CPU chạy → phát sinh page fault : CPU truy cập địa chỉ ảo và chưa có trong RAM
+
+Lấy trang cần từ SSD (file .out hoặc .so) -> copy vào RAM (1 page) -> update page table -> chạy tiếp
+
+Kích thước 1 page Linux phổ biến: 4 KB (4096 bytes)
+
+RAM hết: swap
+
+chọn page ít dùng → ghi xuống SSD (swap out)
+Khi cần lại: truy cập page đó → page fault → đọc từ SSD lên (swap in)
+-> swap nhiều -> chậm chương trình
+
+Thử dùng dynamic linking gộp file .so
+
+
+Trùng tên biến ở nhiều file lỗi sẽ nằm ở linking
+Trùng tên biến ở 1 file sẽ lỗi trong quá trình compilation
+Lỗi Semantic = viết đúng cú pháp nhưng vô lý vì khi compile một file tên biến khởi tạo cùng 1 vùng phải là duy nhất
+
+
+Khi trùng tên biến main với thư viện động .so
+Khi build không lỗi 
+Khi run time
+thường KHÔNG crash, KHÔNG lỗi biến ở main ghi đề .so nguy hiểm
+Với hàm Function trong main sẽ override function trong lib
+
+Trường hợp khác lỗi run time
+không resolve được symbol
+xung đột không cho override
+
+
+Thư viện dynamic hệ điều hành hay trình biên dịch nằm ở:
+   /lib, /usr/lib, /lib64, /usr/lib64
+Khi chạy:
+   OS dùng ld.so để load vào memory (mmap)
+Không nằm cố định trong heap hay stack
+ mà là vùng memory map riêng
+
+Đối với static lib không copy toàn bộ file .a gồm nhiều file thư viện .o, mà chỉ copy file .o cần dùng, nếu dùng 1 file .o nào sẽ copy hết toàn bộ file đó
+
+
+
+Bash script 
+- chạy TUẦN TỰ
+- không biết file nào đã thay đổi
+- lần nào cũng build lại hết
+
+Makefile
+- chỉ build khi cần
+- tự động theo dependency
+- tiết kiệm thời gian
+
+Make biết file nào cần build lại dựa vào: timestamp (thời gian sửa file)
+Nếu:a.c mới hơn a.o→ rebuild a.o
+target < dependency → rebuild
+target >= dependency → skip
+
+
+1 file có
+- mtime (modify time) make file dùng
+- atime (access time)
+- ctime (change metadata)
+
+
+Trùng rule với tên file nào đó, make file không làm gì vì nghĩ target đã tồn tại
+-> Dùng .PHONY để cho makefile biết rule không phải file luôn chạy
+
+Lỗi toán học lỗi ở runtime
+
+Khai báo extern mà không có định nghĩa ở file khác, lỗi trong quá trình linker vì không tìm thấy biến thật được cấp phát
+
+Không có “1 cờ duy nhất” đảm bảo inline 100% — vì inline phụ thuộc vào compiler + optimization.
+Cờ để inline sẽ tăng khả năng thay thế hàm
+__attribute__((always_inline)) inline int add(int a, int b) {
+   return a + b;
+}
+
+gcc -O2 main.c
+gcc -O3 main.c
+
+Cờ dùng như define lúc run dùng cờ -D
+gcc main.c -DDEBUG                  : #define DEBUG
+#define MAX=10                            #define MAX 10
+Là compile time thêm tiền xử lí lúc compile
+
+Argc, argv 
+Thuyền tham số lúc runtime
+Argc : sô tham số truyền vào bao gồm cả tên chương trình
+Argv mảng các tham số dạng string
+
+./a.out a b 3
+argc = 4
+argv[0] = "./a.out"
+argv[1] = "a"
+argv[2] = "b"
+argv[3] = "3"
+
+
+
+
+
+
+
+
+
+
