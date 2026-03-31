@@ -66,9 +66,6 @@ ssize_t readn(int fd, void *ptr, size_t n)
 
 int main()
 {
-    int n_read = 0;
-    
-
     int sockfd = -1;
 
     struct sockaddr_in server_address;
@@ -90,6 +87,7 @@ int main()
         scanf("%d",&connect_server);
         if (connect(sockfd, (struct sockaddr*)&server_address, sizeof(server_address)) == 0 && connect_server == 1)
         {
+            int n_read = 0;
             int option;
             printf("Go 0 de lay listfile go 1 de lay file \n");
             scanf("%d",&option);
