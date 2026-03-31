@@ -39,7 +39,6 @@ ssize_t readn(int fd, void *ptr, size_t n)
 
 int main()
 {
-    int n_read = 0;
     int sockfd = -1;
 
     struct sockaddr_in server_address;
@@ -55,6 +54,7 @@ int main()
     server_address.sin_port = htons(8888);
     if (connect(sockfd, (struct sockaddr*)&server_address, sizeof(server_address)) == 0)
     {
+        int n_read = 0;
         ssize_t n;
         FILE *received_file = fopen("client_txt.txt", "wb");
         while((n = read(sockfd, buffer, sizeof(buffer) - 1)) > 0)
