@@ -123,9 +123,10 @@ int main()
                 while((n = read(sockfd, buffer, sizeof(buffer) - 1)) > 0)
                 {
                     fwrite(buffer, 1, n, received_file);
-                    printf("Đã nhận %d byte...\n", n);
+                    printf("Da nhan %d byte...\n", n);
                     n_read += n;
                 }
+                printf("tong byte da nhận %d byte...\n", n_read);
                 fclose(received_file);
                 memset(buffer, 0, sizeof(buffer)); 
             }   
